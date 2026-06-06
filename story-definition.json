@@ -1,0 +1,86 @@
+{
+  "Titolo": "Le Cronache del Faro Spezzato",
+  "Protagonista": "Ardan, sentinella del villaggio",
+  "Introduzione": "Una nebbia innaturale avvolge la costa. Il faro, spento da settimane, ha risvegliato antiche creature marine. Tu sei l'unico a conoscere il sentiero verso la torre.",
+  "InitialSceneId": "piazza",
+  "SemanticThreshold": 0.58,
+  "EnableSemanticScoreLogging": true,
+  "Scenes": [
+    {
+      "Id": "piazza",
+      "Titolo": "Piazza del Porto",
+      "Descrizione": "I pescatori barricano le botteghe. Vedi la vecchia lanterna del guardiano, un vicolo verso la scogliera e la cappella chiusa.",
+      "Rules": [
+        {
+          "Id": "prendi-lanterna",
+          "TriggerVerbs": ["prendi lanterna", "raccogli lanterna", "lanterna"],
+          "SuccessResponse": "Afferri la lanterna del guardiano. La fiamma azzurra pulsa debolmente.",
+          "GrantedFlags": ["lanterna-raccolta"],
+          "GrantedItems": ["lanterna-azzurra"]
+        },
+        {
+          "Id": "vai-scogliera",
+          "TriggerVerbs": ["vai alla scogliera", "scogliera", "sentiero"],
+          "SuccessResponse": "Ti infili nel sentiero bagnato dal salmastro e raggiungi la scogliera.",
+          "NextSceneId": "scogliera"
+        }
+      ]
+    },
+    {
+      "Id": "scogliera",
+      "Titolo": "Scogliera del Vento",
+      "Descrizione": "Le onde colpiscono le rocce. La porta del faro e' arrugginita e una creatura d'ombra striscia tra i massi.",
+      "Rules": [
+        {
+          "Id": "respingi-ombra",
+          "TriggerVerbs": ["usa lanterna", "illumina creatura", "scaccia ombra"],
+          "RequiredItems": ["lanterna-azzurra"],
+          "SuccessResponse": "La luce azzurra lacera la nebbia e la creatura fugge urlando nel mare.",
+          "BlockedResponse": "La creatura e' troppo vicina. Senza una fonte di luce non puoi passare.",
+          "GrantedFlags": ["ombra-dissolta"]
+        },
+        {
+          "Id": "entra-faro",
+          "TriggerVerbs": ["entra nel faro", "apri porta", "faro"],
+          "RequiredFlags": ["ombra-dissolta"],
+          "SuccessResponse": "Spingi la porta del faro. Gli ingranaggi interni gemono, ma il passaggio si apre.",
+          "BlockedResponse": "Appena ti avvicini, l'ombra ti sbarra la strada. Devi prima respingerla.",
+          "NextSceneId": "faro-interno"
+        },
+        {
+          "Id": "torna-piazza",
+          "TriggerVerbs": ["torna in piazza", "torna indietro", "piazza"],
+          "SuccessResponse": "Ripercorri il sentiero e torni al porto.",
+          "NextSceneId": "piazza"
+        }
+      ]
+    },
+    {
+      "Id": "faro-interno",
+      "Titolo": "Sala del Faro",
+      "Descrizione": "Una scala a chiocciola sale fino alla lente principale. Il meccanismo e' fermo; manca il cristallo di accensione custodito in un altare di metallo.",
+      "Rules": [
+        {
+          "Id": "innesta-lanterna",
+          "TriggerVerbs": ["inserisci lanterna", "usa lanterna nell altare", "attiva faro"],
+          "RequiredItems": ["lanterna-azzurra"],
+          "SuccessResponse": "Inserisci la lanterna nell'altare. La lente si accende e un raggio luminoso squarcia la tempesta. Le creature si disperdono e il villaggio e' salvo.",
+          "GrantedFlags": ["quest-completata"]
+        },
+        {
+          "Id": "scendi-scogliera",
+          "TriggerVerbs": ["scendi", "torna alla scogliera", "esci dal faro"],
+          "SuccessResponse": "Scendi la scala e torni davanti all'ingresso del faro.",
+          "NextSceneId": "scogliera"
+        }
+      ]
+    }
+  ],
+  "GlobalRules": [
+    {
+      "Id": "parla-villaggio",
+      "TriggerVerbs": ["parla con i pescatori", "chiedi aiuto", "parla"],
+      "SuccessResponse": "I pescatori tremano: 'Riaccendi il faro e la nebbia perdera' forza. Cerca la luce del vecchio guardiano.'"
+    }
+  ]
+}

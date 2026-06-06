@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SimpleLLM.Library/SimpleLLM.Library.csproj" />
+  <Project Path="TestConsole/TestConsole.csproj" />
+</Solution>

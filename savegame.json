@@ -1,0 +1,10 @@
+﻿{
+  "StoryTitle": "Le Cronache del Faro Spezzato",
+  "CurrentSceneId": "piazza",
+  "Flags": [
+    "lanterna-raccolta"
+  ],
+  "Inventory": [
+    "lanterna-azzurra"
+  ]
+}

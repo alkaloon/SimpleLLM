@@ -1,0 +1,288 @@
+{
+    "Titolo": "Echi di Neo-Venezia",
+    "Protagonista": "Kaelen",
+    "Introduzione": "La pioggia acida cade incessante su Neo-Venezia. Sei Kaelen, un estrattore di ricordi. Il tuo obiettivo è infiltrarti nell'Archivio Centrale, recuperare il Cristallo Mnemonico e sfuggire al controllo del temibile Doge Digitale.",
+    "InitialSceneId": "vicolo-piovoso",
+    "SemanticThreshold": 0.58,
+    "EnableSemanticScoreLogging": false,
+    "Scenes": [
+        {
+            "Id": "vicolo-piovoso",
+            "Titolo": "Vicolo Piovoso",
+            "Descrizione": "Ti trovi in un vicolo buio, illuminato solo dai neon tremolanti. Davanti a te si erge l'ingresso blindato dell'Archivio Centrale. In un angolo scorgi un mucchio di spazzatura elettronica.",
+            "Rules": [
+                {
+                    "Id": "esplora-vicolo",
+                    "TriggerVerbs": [
+                        "guardati intorno",
+                        "esamina il vicolo",
+                        "cerca indizi",
+                        "osserva l'ambiente"
+                    ],
+                    "SuccessResponse": "Noti che la porta blindata ha un vecchio lettore di schede. Nel mucchio di spazzatura elettronica c'è qualcosa che emette una debole luce blu."
+                },
+                {
+                    "Id": "cerca-rifiuti",
+                    "TriggerVerbs": [
+                        "cerca nel cestino",
+                        "esamina la spazzatura",
+                        "fruga tra i rifiuti",
+                        "rovista nell'immondizia"
+                    ],
+                    "SuccessResponse": "Sposti vecchi cavi e circuiti bruciati trovando una chiave elettronica mezza arrugginita, ma ancora funzionante!",
+                    "GrantedItems": [
+                        "chiave-elettronica"
+                    ]
+                },
+                {
+                    "Id": "entra-archivio",
+                    "TriggerVerbs": [
+                        "apri la porta",
+                        "entra nell'archivio",
+                        "usa la chiave elettronica",
+                        "varca la soglia"
+                    ],
+                    "SuccessResponse": "Il lettore accetta la chiave elettronica. La porta blindata si apre con un sibilo, permettendoti di entrare.",
+                    "BlockedResponse": "La porta è sigillata. Il lettore lampeggia di rosso: ti serve una chiave elettronica per entrare.",
+                    "NextSceneId": "archivio-centrale",
+                    "RequiredItems": [
+                        "chiave-elettronica"
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "archivio-centrale",
+            "Titolo": "Archivio Centrale",
+            "Descrizione": "Una vasta sala server dominata dal ronzio dei processori. Un Guardiano olografico corazzato pattuglia l'unico corridoio che conduce alla Cripta Dati.",
+            "Rules": [
+                {
+                    "Id": "esplora-archivio",
+                    "TriggerVerbs": [
+                        "osserva i server",
+                        "guarda la stanza",
+                        "esamina l'archivio",
+                        "controlla l'area"
+                    ],
+                    "SuccessResponse": "Il Guardiano olografico è letale ma sembra seguire un percorso prevedibile. Puoi provare ad affrontarlo di petto o cercare di hackerare la sua routine di pattuglia."
+                },
+                {
+                    "Id": "attacca-guardiano",
+                    "TriggerVerbs": [
+                        "attacca il guardiano",
+                        "spara al programma",
+                        "distruggi il custode",
+                        "combatti il nemico"
+                    ],
+                    "SuccessResponse": "Sfoderi il tuo blaster emp e fai saltare i circuiti del Guardiano! Le sirene d'allarme iniziano a suonare, ma la via verso la Cripta Dati ora è libera.",
+                    "NextSceneId": "cripta-dati",
+                    "GrantedFlags": [
+                        "allarme-attivo"
+                    ]
+                },
+                {
+                    "Id": "hackera-guardiano",
+                    "TriggerVerbs": [
+                        "usa l'hacking",
+                        "inganna il guardiano",
+                        "falsifica il pass",
+                        "aggira il sistema"
+                    ],
+                    "SuccessResponse": "Ti colleghi furtivamente a un terminale laterale e riscrivi i protocolli del Guardiano senza fare rumore. Hai un accesso pulito e silenzioso alla Cripta Dati.",
+                    "NextSceneId": "cripta-dati",
+                    "GrantedFlags": [
+                        "stealth-attivo"
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "cripta-dati",
+            "Titolo": "Cripta Dati",
+            "Descrizione": "Il cuore segreto del database. Al centro della stanza, sospeso all'interno di un campo magnetico ronzante, riposa il Cristallo Mnemonico. Questa è la chiave per la tua libertà.",
+            "Rules": [
+                {
+                    "Id": "esplora-cripta",
+                    "TriggerVerbs": [
+                        "osserva la cripta",
+                        "guarda il cristallo",
+                        "esamina la stanza",
+                        "analizza il campo"
+                    ],
+                    "SuccessResponse": "Il cristallo pulsa di pura energia mnemonica, contenendo migliaia di ricordi estratti. È il tuo obiettivo finale."
+                },
+                {
+                    "Id": "prendi-cristallo",
+                    "TriggerVerbs": [
+                        "prendi il cristallo",
+                        "ruba la memoria",
+                        "estrai il cristallo mnemonico",
+                        "afferra l'oggetto"
+                    ],
+                    "SuccessResponse": "Disattivi i limitatori del campo magnetico e intaschi il prezioso Cristallo Mnemonico. Senti l'eco di mille vite sussurrarti nella mente.",
+                    "GrantedItems": [
+                        "cristallo-mnemonico"
+                    ]
+                },
+                {
+                    "Id": "fuga-ponte",
+                    "TriggerVerbs": [
+                        "esci dalla cripta",
+                        "fuggi via",
+                        "vai al ponte",
+                        "scappa all'esterno"
+                    ],
+                    "SuccessResponse": "Con l'artefatto al sicuro, ti lanci verso l'uscita principale, raggiungendo l'area esterna della struttura.",
+                    "BlockedResponse": "Non puoi andartene a mani vuote. La tua missione e la tua stessa vita dipendono dal recupero di quel cristallo.",
+                    "NextSceneId": "ponte-dei-sospiri",
+                    "RequiredItems": [
+                        "cristallo-mnemonico"
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "ponte-dei-sospiri",
+            "Titolo": "Ponte dei Sospiri",
+            "Descrizione": "L'unica vera via d'uscita dalla zona restrittiva. A sbarrarti il passaggio c'è il Doge Digitale, un gigantesco avatar mostruoso fatto di glitch rossi e cavi metallici.",
+            "Rules": [
+                {
+                    "Id": "esplora-ponte",
+                    "TriggerVerbs": [
+                        "guarda il doge",
+                        "esamina il nemico",
+                        "osserva il ponte",
+                        "analizza la minaccia"
+                    ],
+                    "SuccessResponse": "Il Doge Digitale ti fissa con occhi vuoti. Sembra imbattibile in uno scontro fisico diretto. Devi usare il potere del cristallo contro di lui, provare ad aggirarlo se sei nascosto, o arrenderti e cedergli il bottino."
+                },
+                {
+                    "Id": "combatti-doge",
+                    "TriggerVerbs": [
+                        "usa il cristallo mnemonico",
+                        "sovraccarica il doge",
+                        "acceca il nemico con i ricordi",
+                        "attacca usando il cristallo"
+                    ],
+                    "SuccessResponse": "Incanali tutte le memorie contenute nel Cristallo direttamente nel mainframe del Doge! L'avatar emette uno stridio assordante, non riuscendo a processare l'emozione umana, e si dissolve in un innocuo mare di pixel bianchi.",
+                    "NextSceneId": "finale-buono",
+                    "RequiredItems": [
+                        "cristallo-mnemonico"
+                    ],
+                    "ConsumedItems": [
+                        "cristallo-mnemonico"
+                    ]
+                },
+                {
+                    "Id": "aggira-doge",
+                    "TriggerVerbs": [
+                        "aggira il doge",
+                        "passa inosservato",
+                        "muoviti di nascosto",
+                        "sgattaiola via nell'ombra"
+                    ],
+                    "SuccessResponse": "Sfruttando l'assenza di allarmi e i protocolli furtivi di prima, strisci attraverso un condotto di ventilazione laterale superando il Doge senza che si accorga di nulla.",
+                    "NextSceneId": "finale-buono",
+                    "RequiredFlags": [
+                        "stealth-attivo"
+                    ]
+                },
+                {
+                    "Id": "arrenditi-doge",
+                    "TriggerVerbs": [
+                        "consegna il cristallo",
+                        "dai l'oggetto al doge",
+                        "arrenditi al custode",
+                        "sottomettiti alla macchina"
+                    ],
+                    "SuccessResponse": "Consapevole di non avere speranze, ti inginocchi e consegni il Cristallo Mnemonico. Il Doge ride con voce metallica e ti lascia passare, spogliato del tuo premio.",
+                    "NextSceneId": "finale-cattivo",
+                    "RequiredItems": [
+                        "cristallo-mnemonico"
+                    ],
+                    "ConsumedItems": [
+                        "cristallo-mnemonico"
+                    ]
+                }
+            ]
+        },
+        {
+            "Id": "finale-buono",
+            "Titolo": "La Fuga Trionfale",
+            "Descrizione": "Hai superato il Doge Digitale. La nebbia tossica e i fumi di Neo-Venezia si diradano man mano che ti allontani. Hai salvato te stesso e i ricordi perduti dell'umanità.",
+            "Rules": [
+                {
+                    "Id": "conclusione-vittoria",
+                    "TriggerVerbs": [
+                        "guarda il cielo",
+                        "esulta per la vittoria",
+                        "riposati un momento",
+                        "goditi la libertà"
+                    ],
+                    "SuccessResponse": "Respiri a pieni polmoni, sentendo finalmente il calore di un vero sole sul viso. La missione è compiuta e sei libero dalle catene del sistema."
+                },
+                {
+                    "Id": "ricomincia-vittoria",
+                    "TriggerVerbs": [
+                        "ricomincia",
+                        "gioca di nuovo",
+                        "torna all'inizio",
+                        "resetta il simulatore"
+                    ],
+                    "SuccessResponse": "Reinizializzazione del loop mnemonico in corso...",
+                    "NextSceneId": "vicolo-piovoso"
+                }
+            ]
+        },
+        {
+            "Id": "finale-cattivo",
+            "Titolo": "Senza Memoria",
+            "Descrizione": "Hai salva la vita fisica, ma senza il Cristallo Mnemonico non sei altro che uno scarto della città. Il tuo debito con le corporazioni ti schiaccerà definitivamente.",
+            "Rules": [
+                {
+                    "Id": "conclusione-sconfitta",
+                    "TriggerVerbs": [
+                        "piangi amare lacrime",
+                        "disperati nel buio",
+                        "accetta la sconfitta",
+                        "guarda il vuoto davanti a te"
+                    ],
+                    "SuccessResponse": "La pioggia acida riprende a cadere spietata, mescolandosi alle tue lacrime di rabbia e frustrazione. Il sistema ha vinto ancora."
+                },
+                {
+                    "Id": "ricomincia-sconfitta",
+                    "TriggerVerbs": [
+                        "ricomincia",
+                        "gioca di nuovo",
+                        "ritenta la fortuna",
+                        "cerca redenzione"
+                    ],
+                    "SuccessResponse": "Caricamento di una nuova linea temporale. Forse questa volta farai scelte migliori...",
+                    "NextSceneId": "vicolo-piovoso"
+                }
+            ]
+        }
+    ],
+    "GlobalRules": [
+        {
+            "Id": "inventario-globale",
+            "TriggerVerbs": [
+                "guarda inventario",
+                "cosa possiedo",
+                "mostra oggetti",
+                "controlla lo zaino"
+            ],
+            "SuccessResponse": "Controlli le tue tasche termiche per fare l'inventario del tuo equipaggiamento. (Consulta i tuoi Item Attivi nel sistema di gioco)."
+        },
+        {
+            "Id": "aiuto-globale",
+            "TriggerVerbs": [
+                "aiuto",
+                "cosa devo fare",
+                "opzioni disponibili",
+                "richiedi supporto"
+            ],
+            "SuccessResponse": "Suggerimento: prova a 'guardarti intorno' in ogni nuova stanza per scoprire indizi. Puoi interagire con gli elementi descritti, raccogliere oggetti necessari e compiere scelte cruciali per avanzare."
+        }
+    ]
+}
