@@ -4,10 +4,15 @@ Questa guida descrive in dettaglio tutti gli esempi presenti nella soluzione e s
 
 ## Panoramica della soluzione
 
-La soluzione contiene due progetti principali:
+La soluzione contiene tre progetti principali:
 
 - `SimpleLLM.Library`: libreria con i componenti riutilizzabili (modelli, rete neurale, motore embedding).
 - `TestConsole`: raccolta di esempi eseguibili per capire i vari approcci passo-passo.
+- `InteractiveStories`: progetto dedicato alle demo di avventure testuali interattive.
+
+Per avviare direttamente la demo interattiva dal nuovo progetto:
+
+- `dotnet run --project InteractiveStories/InteractiveStories.csproj`
 
 ## Come eseguire un esempio
 
@@ -181,7 +186,7 @@ Cosa mostra:
 
 File coinvolti:
 
-- `TestConsole/InteractiveStoryDemo.cs`
+- `InteractiveStories/InteractiveStoryDemo.cs`
 - `SimpleLLM.Library/StoryGameEngine.cs`
 
 Obiettivo:

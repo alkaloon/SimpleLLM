@@ -1,4 +1,6 @@
-﻿namespace TestConsole
+﻿using InteractiveStories;
+
+namespace TestConsole
 {
 
 	/// <summary>
@@ -12,7 +14,7 @@
 		/// </summary>
 		private static void Main(string[] args)
 		{
-			InteractiveStoryDemo.Execute();
+			MicroLLM.Execute();
 			// DocumentTest.Execute();
 		}
 	}

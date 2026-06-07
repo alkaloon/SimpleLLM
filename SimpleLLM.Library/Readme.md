@@ -242,6 +242,35 @@ StoryDefinition def2 = StoryDefinition.FromJson(jsonText);
 
 Se `EnableSemanticScoreLogging` e' `true`, il motore espone `LastSemanticLog` con informazioni di tuning (score, soglia, regola candidata).
 
+### Migliorie UX nella demo
+
+La demo interattiva ora parte con un banner iniziale, mostra i comandi disponibili e suggerisce alcune azioni valide per la scena corrente. In più:
+
+1. Cerca automaticamente `story-definition.json` o `neo-venice.json` nel progetto e nelle cartelle di esecuzione.
+2. Accetta un percorso file come primo argomento da riga di comando.
+3. Mostra suggerimenti contestuali dopo ogni input, così il giocatore capisce subito cosa provare.
+4. Rende i messaggi di blocco più utili quando mancano oggetti o flag narrativi.
+
+### Obiettivi di scena
+
+Le scene possono ora definire un campo opzionale `Objective` per mostrare al giocatore l'obiettivo corrente in modo esplicito. Se non viene fornito, il motore prova a derivare un obiettivo dinamico dalle azioni disponibili nella scena.
+
+### Difficolta e suggerimenti
+
+La definizione storia supporta anche `Difficulty` con questi valori: `Easy`, `Normal`, `Hard`, `Expert`.
+
+- `Easy` e `Normal` mostrano i suggerimenti gia all'avvio.
+- `Hard` ed `Expert` nascondono i suggerimenti iniziali e invitano a usare `aiuto`.
+- La demo console chiede la modalita di gioco all'avvio, così la scelta e immediata anche senza modificare il JSON.
+
+Esempio JSON:
+
+```json
+{
+    "Difficulty": "Hard"
+}
+```
+
 ### Esempio minimo di utilizzo
 
 ```csharp
