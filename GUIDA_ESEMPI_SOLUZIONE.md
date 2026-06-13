@@ -428,3 +428,5 @@ Perche questo output:
 
 - La risposta dipende dal best match semantico tra query e FAQ indicizzate.
 - Se il punteggio non supera la soglia (0.55), il sistema evita risposte potenzialmente errate.
+
+

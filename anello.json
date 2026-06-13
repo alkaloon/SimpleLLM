@@ -1,0 +1,39 @@
+{
+    "story-definition": {
+        "title": "La Scomparsa dell'Anello",
+        "protagonist": "Lorenzo Valerio",
+        "introduction": "Lorenzo è un antiquario curioso che ha appena scoperto una strana antica moneta in un vecchio museo.",
+        "scenes": [
+            {
+                "scene": "1 - Il Trofeo di Gold",
+                "description": "Lorenzo trova la moneta misteriosa e l'ammira per qualche istante prima di notare che la sua superficie è coperta di simboli antichi.",
+                "rules": [
+                    {"trigger": ["guarda", "esaminare"], "prerequisites": [], "effects": [{"description": "Lorenzo si avvicina all'antica moneta e inizia a esaminarla."}, {"description": "Il suo sguardo diventa intenso mentre si concentra su una particolare scritta."}]}
+                ]
+            },
+            {
+                "scene": "2 - La Maledizione",
+                "description": "Lorenzo nota che la moneta ha un misterioso simbolo sul dorso. L'imbarazzo lo colpisce come una maledizione.",
+                "rules": [
+                    {"trigger": ["scopri", "riconosce"], "prerequisites": [], "effects": [{"description": "Lorenzo si accorge che la moneta ha un simbolo familiare."}, {"description": "Il suo viso assume una linea cupa, e le sue mani si fermano sulle labbra."}]}
+                ]
+            },
+            {
+                "scene": "3 - La Questione",
+                "description": "Lorenzo è incerto sull'identità della moneta ma ha la sensazione che qualcosa stia per succedere.",
+                "rules": [
+                    {"trigger": ["dubbia", "pensa"], "prerequisites": [], "effects": [{"description": "Lorenzo si domanda a se stesso chi potrebbe essere stato qui prima di lui."}, {"description": "Il suo pensiero diventa più profondo e complesso."}]}
+                ]
+            },
+            {
+                "scene": "4 - La Fuga",
+                "description": "Un rumore inaspettato interrompe il silenzio. Lorenzo vede un gruppo di ladri che si avvicinano al museo.",
+                "rules": [
+                    {"trigger": ["rumore", "vai"], "prerequisites": [], "effects": [{"description": "Lorenzo si prepara a scappare."}, {"description": "Il suo cuore batte più forte mentre cerca di trovare una via d'uscita."}]}
+                ]
+            }
+        ],
+        "semanticThreshold": 0.6,
+        "enableSemanticScoreLogging": true
+    }
+}

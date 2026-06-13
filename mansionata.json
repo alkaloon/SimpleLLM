@@ -1,0 +1,151 @@
+{
+    "name": "create_new_file",
+    "arguments": {
+        "filepath": "InteractiveStories/RomanzoGiallo/story-definition.json",
+        "contents": {
+            "Title": "Mistero alla Mansionata",
+            "Description": "Un detective arguto svela l'assassino in una mansionata maledetta.",
+            "Objects": [
+                {
+                    "Name": "pistola",
+                    "Location": "ingresso"
+                },
+                {
+                    "Name": "diario",
+                    "Location": "sala principale"
+                },
+                {
+                    "Name": "chiave antica",
+                    "Location": "biblioteca"
+                }
+            ],
+            "Scenes": [
+                {
+                    "Name": "Ingresso",
+                    "Description": "Il detective arriva all'ingresso della mansionata.",
+                    "ActionRules": [
+                        {
+                            "Trigger": "entrare",
+                            "Prerequisites": [
+                                {
+                                    "Type": "location",
+                                    "Value": "ingresso"
+                                }
+                            ],
+                            "Effects": [
+                                {
+                                    "Type": "moveScene",
+                                    "Value": "sala principale"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "Sala Principale",
+                    "Description": "Il detective si trova nella sala principale, dove è stato commesso l'omicidio.",
+                    "ActionRules": [
+                        {
+                            "Trigger": "esaminare il corpo",
+                            "Prerequisites": [],
+                            "Effects": [
+                                {
+                                    "Type": "log",
+                                    "Value": "L'autopsia indica che il dottore è stato assassinato con una pistola."
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "Biblioteca",
+                    "Description": "La biblioteca della mansionata, piena di libri antichi.",
+                    "ActionRules": [
+                        {
+                            "Trigger": "prendere la chiave antica",
+                            "Prerequisites": [],
+                            "Effects": [
+                                {
+                                    "Type": "addObject",
+                                    "Value": "chiave antica"
+                                },
+                                {
+                                    "Type": "moveScene",
+                                    "Value": "sala principale"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "Cucina",
+                    "Description": "Una cucina moderna con utensili da cucina.",
+                    "ActionRules": []
+                },
+                {
+                    "Name": "Camera del Dottore",
+                    "Description": "La camera privata del dottore, dove è stato trovato il suo corpo.",
+                    "ActionRules": [
+                        {
+                            "Trigger": "esaminare il letto",
+                            "Prerequisites": [],
+                            "Effects": [
+                                {
+                                    "Type": "log",
+                                    "Value": "Sotto il letto c'è un oggetto nascosto."
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "Giardino",
+                    "Description": "Un grande giardino con una vallata che si estende lontano.",
+                    "ActionRules": []
+                },
+                {
+                    "Name": "Stanza Segreta",
+                    "Description": "Una stanza segreta nascosta dietro un mobile, piena di vecchi documenti e fotografie.",
+                    "ActionRules": [
+                        {
+                            "Trigger": "esaminare il diario",
+                            "Prerequisites": [],
+                            "Effects": [
+                                {
+                                    "Type": "log",
+                                    "Value": "Il diario contiene informazioni su un antico segreto familiare."
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "Soggiorno",
+                    "Description": "Un grande soggiorno con mobili eleganti e una grande finestra che dà sul giardino.",
+                    "ActionRules": []
+                },
+                {
+                    "Name": "Ufficio",
+                    "Description": "Un ufficio modesto con un tavolo da lavoro e alcune carte importanti.",
+                    "ActionRules": [
+                        {
+                            "Trigger": "esaminare le carte",
+                            "Prerequisites": [],
+                            "Effects": [
+                                {
+                                    "Type": "log",
+                                    "Value": "Le carte indicano che c'è una colonna di lusso nascosta."
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "Balcone",
+                    "Description": "Un grande balcone con vista sulla vallata.",
+                    "ActionRules": []
+                }
+            ]
+        }
+    }
+}
