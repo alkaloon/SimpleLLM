@@ -24,6 +24,8 @@ TriggerVerbs: array di almeno 3 frasi trigger naturali
 SuccessResponse: string
 BlockedResponse: string opzionale
 NextSceneId: string opzionale
+NextSceneObjective string opzionale
+IntentDescription string opzionale
 RequiredFlags: array string opzionale
 RequiredItems: array string opzionale
 GrantedFlags: array string opzionale
@@ -32,7 +34,7 @@ ConsumedItems: array string opzionale
 Vincoli di qualità:
 
 Output deve essere SOLO JSON valido, senza testo extra.
-Almeno 6 scene e massimo 12.
+Almeno 10 scene e massimo 100.
 Ogni scena deve avere almeno 2 regole.
 Deve esistere almeno un percorso di completamento quest principale.
 Deve esistere almeno un blocco logico con prerequisiti (flag o item).

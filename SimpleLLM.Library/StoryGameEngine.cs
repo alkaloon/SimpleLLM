@@ -9,169 +9,12 @@ using SimpleLLM.Library.VectorEngine;
 namespace SimpleLLM.Library.TextAdventure
 {
 	/// <summary>
-	/// Livello di difficolta della storia e dei suggerimenti iniziali.
-	/// </summary>
-	public enum StoryDifficulty
-	{
-		Easy,
-		Normal,
-		Hard,
-		Expert
-	}
-
-	/// <summary>
-	/// Definizione ad alto livello del gioco narrativo.
-	/// </summary>
-	public sealed class StoryDefinition
-	{
-		public required string Titolo { get; init; }
-		public required string Protagonista { get; init; }
-		public required string Introduzione { get; init; }
-		public required string InitialSceneId { get; init; }
-		public required IReadOnlyList<StoryScene> Scenes { get; init; }
-		public IReadOnlyList<StoryActionRule> GlobalRules { get; init; } = [];
-		public float SemanticThreshold { get; init; } = 0.62f;
-		public bool EnableSemanticScoreLogging { get; init; } = false;
-		public StoryDifficulty Difficulty { get; init; } = StoryDifficulty.Normal;
-		public bool ShowHintsOnStart => Difficulty is StoryDifficulty.Easy or StoryDifficulty.Normal;
-		public bool ShowHintsDuringGame => ShowHintsOnStart;
-
-		public static StoryDefinition FromJson(string json)
-		{
-			if (string.IsNullOrWhiteSpace(json))
-			{
-				throw new ArgumentException("JSON storia vuoto.", nameof(json));
-			}
-
-			StoryDefinition? definition = JsonSerializer.Deserialize<StoryDefinition>(json);
-			if (definition is null)
-			{
-				throw new InvalidOperationException("Impossibile deserializzare la definizione storia.");
-			}
-
-			Validate(definition);
-			return definition;
-		}
-
-		public static StoryDefinition FromFile(string filePath)
-		{
-			if (string.IsNullOrWhiteSpace(filePath))
-			{
-				throw new ArgumentException("Percorso file storia non valido.", nameof(filePath));
-			}
-
-			string fullPath = Path.GetFullPath(filePath);
-			if (!File.Exists(fullPath))
-			{
-				throw new FileNotFoundException("File definizione storia non trovato.", fullPath);
-			}
-
-			string json = File.ReadAllText(fullPath, Encoding.UTF8);
-			return FromJson(json);
-		}
-
-		private static void Validate(StoryDefinition definition)
-		{
-			if (definition.Scenes is null || definition.Scenes.Count == 0)
-			{
-				throw new InvalidOperationException("La storia deve contenere almeno una scena.");
-			}
-
-			if (definition.SemanticThreshold <= 0f || definition.SemanticThreshold > 1f)
-			{
-				throw new InvalidOperationException("SemanticThreshold deve essere compreso nell'intervallo (0, 1].");
-			}
-		}
-	}
-
-	/// <summary>
-	/// Un nodo narrativo con descrizione e regole locali.
-	/// </summary>
-	public sealed class StoryScene
-	{
-		public required string Id { get; init; }
-		public required string Titolo { get; init; }
-		public required string Descrizione { get; init; }
-		public string? Objective { get; init; }
-		public required IReadOnlyList<StoryActionRule> Rules { get; init; }
-	}
-
-	/// <summary>
-	/// Regola che mappa un intento testuale a una transizione narrativa.
-	/// </summary>
-	public sealed class StoryActionRule
-	{
-		public required string Id { get; init; }
-		public required IReadOnlyList<string> TriggerVerbs { get; init; }
-		public required string SuccessResponse { get; init; }
-		public string? BlockedResponse { get; init; }
-		public string? NextSceneId { get; init; }
-		public IReadOnlyList<string> RequiredFlags { get; init; } = [];
-		public IReadOnlyList<string> RequiredItems { get; init; } = [];
-		public IReadOnlyList<string> GrantedFlags { get; init; } = [];
-		public IReadOnlyList<string> GrantedItems { get; init; } = [];
-		public IReadOnlyList<string> ConsumedItems { get; init; } = [];
-	}
-
-	/// <summary>
-	/// Stato runtime della sessione di gioco.
-	/// </summary>
-	public sealed class StoryGameState
-	{
-		public required string CurrentSceneId { get; set; }
-		public HashSet<string> Flags { get; } = new(StringComparer.OrdinalIgnoreCase);
-		public HashSet<string> Inventory { get; } = new(StringComparer.OrdinalIgnoreCase);
-	}
-
-	/// <summary>
-	/// Risultato elaborazione input utente.
-	/// </summary>
-	public sealed class StoryTurnResult
-	{
-		public required string Response { get; init; }
-		public required StoryScene CurrentScene { get; init; }
-		public bool IsBlocked { get; init; }
-		public string? MatchedRuleId { get; init; }
-	}
-
-	/// <summary>
-	/// Suggerimento sintetico per guidare il giocatore nella scena corrente.
-	/// </summary>
-	public sealed record StoryActionHint
-	{
-		public required string Command { get; init; }
-		public required string RuleId { get; init; }
-		public required bool IsAvailable { get; init; }
-		public required string Note { get; init; }
-		public string? NextSceneId { get; init; }
-	}
-
-	/// <summary>
-	/// Stato sintetico della scena corrente per la UI testuale.
-	/// </summary>
-	public sealed record StorySceneStatus
-	{
-		public required string SceneTitle { get; init; }
-		public required string SceneDescription { get; init; }
-		public required string Objective { get; init; }
-		public required string InventorySummary { get; init; }
-		public required string FlagSummary { get; init; }
-		public required IReadOnlyList<StoryActionHint> Suggestions { get; init; }
-	}
-
-	/// <summary>
 	/// Motore testuale: interpreta input utente e applica regole di trama.
 	/// </summary>
-	public sealed class StoryGameEngine
+	public sealed partial class StoryGameEngine
 	{
-		private static readonly JsonSerializerOptions SaveJsonOptions = new()
-		{
-			WriteIndented = true
-		};
-
 		private readonly StoryDefinition _definition;
 		private readonly Dictionary<string, StoryScene> _scenesById;
-		private readonly StoryGameState _state;
 		private readonly IEmbeddingService? _embeddingService;
 		private readonly float _semanticThreshold;
 		private readonly bool _enableSemanticScoreLogging;
@@ -199,8 +42,6 @@ namespace SimpleLLM.Library.TextAdventure
 			_semanticIndex = BuildSemanticIndex();
 		}
 
-		public StoryGameState State => _state;
-
 		public StoryScene CurrentScene => _scenesById[_state.CurrentSceneId];
 
 		public string CurrentObjective => BuildCurrentObjective();
@@ -211,106 +52,96 @@ namespace SimpleLLM.Library.TextAdventure
 		{
 			return BuildStartMessage(includeHints);
 		}
-
-		/// <summary>
-		/// Salva lo stato della sessione in formato JSON su file.
-		/// </summary>
-		public void SaveToFile(string filePath)
-		{
-			if (string.IsNullOrWhiteSpace(filePath))
-			{
-				throw new ArgumentException("Percorso di salvataggio non valido.", nameof(filePath));
-			}
-
-			string fullPath = Path.GetFullPath(filePath);
-			string? folder = Path.GetDirectoryName(fullPath);
-			if (!string.IsNullOrWhiteSpace(folder))
-			{
-				Directory.CreateDirectory(folder);
-			}
-
-			File.WriteAllText(fullPath, SaveToJson(), Encoding.UTF8);
-		}
-
-		/// <summary>
-		/// Carica lo stato della sessione da file JSON.
-		/// </summary>
-		public void LoadFromFile(string filePath)
-		{
-			if (string.IsNullOrWhiteSpace(filePath))
-			{
-				throw new ArgumentException("Percorso di caricamento non valido.", nameof(filePath));
-			}
-
-			string fullPath = Path.GetFullPath(filePath);
-			if (!File.Exists(fullPath))
-			{
-				throw new FileNotFoundException("File di salvataggio non trovato.", fullPath);
-			}
-
-			string json = File.ReadAllText(fullPath, Encoding.UTF8);
-			LoadFromJson(json);
-		}
-
-		/// <summary>
-		/// Serializza lo stato corrente in JSON.
-		/// </summary>
-		public string SaveToJson()
-		{
-			var save = new StoryGameSaveData
-			{
-				StoryTitle = _definition.Titolo,
-				CurrentSceneId = _state.CurrentSceneId,
-				Flags = _state.Flags.OrderBy(f => f, StringComparer.OrdinalIgnoreCase).ToArray(),
-				Inventory = _state.Inventory.OrderBy(i => i, StringComparer.OrdinalIgnoreCase).ToArray()
-			};
-
-			return JsonSerializer.Serialize(save, SaveJsonOptions);
-		}
-
-		/// <summary>
-		/// Carica lo stato corrente da un payload JSON.
-		/// </summary>
-		public void LoadFromJson(string json)
-		{
-			if (string.IsNullOrWhiteSpace(json))
-			{
-				throw new ArgumentException("Payload JSON vuoto.", nameof(json));
-			}
-
-			StoryGameSaveData? save = JsonSerializer.Deserialize<StoryGameSaveData>(json);
-			if (save is null)
-			{
-				throw new InvalidOperationException("Impossibile deserializzare il salvataggio.");
-			}
-
-			if (string.IsNullOrWhiteSpace(save.CurrentSceneId) || !_scenesById.ContainsKey(save.CurrentSceneId))
-			{
-				throw new InvalidOperationException("Il salvataggio contiene una scena non valida.");
-			}
-
-			if (!string.IsNullOrWhiteSpace(save.StoryTitle)
-					&& !string.Equals(save.StoryTitle, _definition.Titolo, StringComparison.OrdinalIgnoreCase))
-			{
-				throw new InvalidOperationException("Il salvataggio appartiene a una storia diversa.");
-			}
-
-			_state.CurrentSceneId = save.CurrentSceneId;
-
-			_state.Flags.Clear();
-			foreach (string flag in save.Flags ?? [])
-			{
-				_state.Flags.Add(flag);
-			}
-
-			_state.Inventory.Clear();
-			foreach (string item in save.Inventory ?? [])
-			{
-				_state.Inventory.Add(item);
-			}
-		}
-
 		public StoryTurnResult HandleInput(string playerInput)
+		{
+			LastSemanticLog = null;
+			string normalized = Normalize(playerInput);
+			if (string.IsNullOrWhiteSpace(normalized))
+			{
+				return BuildResult("Non sento alcuna azione. Descrivi cosa vuoi fare.", isBlocked: true, ruleId: null);
+			}
+			if (normalized is "aiuto" or "help" or "comandi")
+			{
+				return BuildResult(BuildHelpMessage(), isBlocked: false, ruleId: null);
+			}
+			if (normalized is "guarda" or "osserva" or "look")
+			{
+				return BuildResult(FormatScene(CurrentScene), isBlocked: false, ruleId: null);
+			}
+			if (normalized is "inventario" or "zaino" or "inventory")
+			{
+				return BuildResult(BuildInventoryMessage(), isBlocked: false, ruleId: null);
+			}
+			if (normalized is "stato")
+			{
+				return BuildResult(BuildFlagsMessage(), isBlocked: false, ruleId: null);
+			}
+
+			// Step 1: Determine the intent of the user input
+			string? intent = DetermineIntent(normalized);
+			if (intent == null)
+			{
+				return BuildResult("Non riesco a capire cosa vuoi fare. Prova a riformulare la tua azione.", isBlocked: true, ruleId: null);
+			}
+
+			// Step 2: Filter rules based on the determined intent
+			var filteredRules = CurrentScene.Rules
+			.Concat(_definition.GlobalRules)
+			.Where(r => r.IntentDescription == intent)
+			.Select(r => new
+			{
+				Rule = r,
+				Score = GetMatchScore(intent, r.TriggerVerbs)
+			})
+			.Where(r => r.Score > 0f)
+			.OrderByDescending(r => r.Score)
+			.ToList();
+
+			if (filteredRules.Count == 0)
+			{
+				SemanticMatchResult? semanticMatch = FindSemanticRule(normalized);
+				if (_enableSemanticScoreLogging && semanticMatch is not null)
+				{
+					LastSemanticLog = semanticMatch.Accepted
+					? $"[Semantica] Match '{semanticMatch.TriggerText}' (regola: {semanticMatch.Rule.Id}) con score {semanticMatch.Score:F3} >= soglia {_semanticThreshold:F3}."
+					: $"[Semantica] Candidato '{semanticMatch.TriggerText}' (regola: {semanticMatch.Rule.Id}) con score {semanticMatch.Score:F3} < soglia {_semanticThreshold:F3}.";
+				}
+				if (semanticMatch is not null && semanticMatch.Accepted)
+				{
+					filteredRules.Add(new { semanticMatch.Rule, semanticMatch.Score });
+				}
+			}
+
+			if (filteredRules.Count == 0)
+			{
+				IReadOnlyList<StoryActionHint> hints = GetActionHints(3);
+				string suggestion = ShowHintsDuringGame && hints.Count > 0
+				? $" Prova: {string.Join(", ", hints.Select(h => h.Command))}."
+				: string.Empty;
+				return BuildResult($"Non riesco ad associare questa azione alla scena corrente.{suggestion}", isBlocked: true, ruleId: null);
+			}
+			foreach (var candidate in filteredRules)
+			{
+				if (!HasRequirements(candidate.Rule))
+				{
+					string blockedText = string.IsNullOrWhiteSpace(candidate.Rule.BlockedResponse)
+					? "Ci provi, ma ti manca qualcosa per riuscirci."
+					: candidate.Rule.BlockedResponse;
+					string? missingRequirements = BuildMissingRequirementsNote(candidate.Rule);
+					if (!string.IsNullOrWhiteSpace(missingRequirements))
+					{
+						blockedText = $"{blockedText} {missingRequirements}.";
+					}
+					blockedText = AppendHelpfulNudge(blockedText);
+					return BuildResult(blockedText, isBlocked: true, ruleId: candidate.Rule.Id);
+				}
+				ApplyRule(candidate.Rule);
+				string response = BuildNarrativeResponse(candidate.Rule.SuccessResponse, sceneChanged: candidate.Rule.NextSceneId is not null);
+				return BuildResult(response, isBlocked: false, ruleId: candidate.Rule.Id);
+			}
+			return BuildResult("L'azione non produce effetti narrativi rilevanti.", isBlocked: true, ruleId: null);
+		}
+		public StoryTurnResult HandleInput2(string playerInput)
 		{
 			LastSemanticLog = null;
 
@@ -423,52 +254,7 @@ namespace SimpleLLM.Library.TextAdventure
 			// la regola venga selezionata correttamente.
 			return scores?.Max() ?? 0f;
 		}
-		[Obsolete("Usa GetMatchScore per ottenere un punteggio di similarità più accurato. IsMatch ora restituisce una tupla con match booleano e punteggio float.")]
-		private (bool, float) IsMatch(string normalizedInput, IReadOnlyList<string> verbs)
-		{
-			// 1. Controllo Lessico (Veloce): se l'utente scrive la parola esatta, accettiamo subito.
-			foreach (string verb in verbs)
-			{
-				string normalizedVerb = Normalize(verb);
-				if (normalizedInput == normalizedVerb || normalizedInput.StartsWith(normalizedVerb + " ", StringComparison.Ordinal))
-				{
-					return (true, 1.0f);
-				}
-
-				//if (normalizedInput.Contains(" " + normalizedVerb + " ", StringComparison.Ordinal))
-				//{
-				//        return true;
-				//}
-
-				//if (normalizedInput.EndsWith(" " + normalizedVerb, StringComparison.Ordinal))
-				//{
-				//        return true;
-				//}
-			}
-			// 2. Controllo Semantico: se non c'è match esatto e abbiamo un servizio di embedding attivo,
-			// cerchiamo una corrispondenza nel "Semantic Index".
-			if (_embeddingService != null && _semanticIndex.Count > 0)
-			{
-				ReadOnlyMemory<float> inputVector = _embeddingService.GetEmbedding(normalizedInput);
-
-				foreach (var entry in _semanticIndex)
-				{
-					// Calcoliamo la similarità del coseno tra l'input dell'utente e il trigger della regola.
-					// Nota: Se vogliamo che questa logica sia gestita da IsMatch, dobbiamo assicurarci 
-					// che "verbs" o le regole correlate siano accessibili tramite l'indice semantico.
-
-					// Tuttavia, la struttura attuale di IsMatch riceve una lista di stringhe (verbs).
-					// Se vogliamo mantenere la firma del metodo ma renderlo intelligente:
-					float similarity = _embeddingService.CalculateSimilarity(inputVector.Span, entry.Embedding.Span);
-
-					if (similarity >= _semanticThreshold)
-					{
-						return (true, similarity);
-					}
-				}
-			}
-			return (false, 0f);
-		}
+		
 
 		private bool HasRequirements(StoryActionRule rule)
 		{
@@ -844,29 +630,31 @@ namespace SimpleLLM.Library.TextAdventure
 					best.Score,
 					Accepted: true);
 		}
-	}
 
-	internal sealed record RuleEmbeddingEntry(
-			StoryActionRule Rule,
-			string SceneId,
-			bool IsGlobal,
-			string TriggerText,
-			ReadOnlyMemory<float> Embedding);
+		public string? DetermineIntent(string normalizedInput)
+		{
+			if (_embeddingService is null || _semanticIndex.Count == 0)
+			{
+				return null;
+			}
 
-	internal sealed record SemanticMatchResult(
-			StoryActionRule Rule,
-			string TriggerText,
-			float Score,
-			bool Accepted);
+			ReadOnlyMemory<float> inputVector = _embeddingService.GetEmbedding(normalizedInput);
 
-	/// <summary>
-	/// DTO serializzabile per persistenza della sessione.
-	/// </summary>
-	public sealed class StoryGameSaveData
-	{
-		public string StoryTitle { get; set; } = string.Empty;
-		public string CurrentSceneId { get; set; } = string.Empty;
-		public string[] Flags { get; set; } = [];
-		public string[] Inventory { get; set; } = [];
+			var bestIntents = from e in _semanticIndex
+							  where !string.IsNullOrWhiteSpace(e.Rule.IntentDescription)
+							  let score = _embeddingService.CalculateSimilarity(inputVector.Span, e.Embedding.Span)
+							  select new
+							  {
+								  Intent = e.Rule.IntentDescription,
+								  Score = score
+							  };
+
+			// Group by intent and take the highest scoring example for each intent
+			var groupedIntents = bestIntents.GroupBy(i => i.Intent)
+											.Select(g => g.OrderByDescending(x => x.Score).First())
+											.OrderByDescending(x => x.Score);
+
+			return groupedIntents.FirstOrDefault()?.Intent ?? normalizedInput;
+		}
 	}
 }

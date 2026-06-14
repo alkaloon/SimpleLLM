@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "InteractiveStories": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Alberto\\SVILUPPO\\SimpleLLM\\mistero_molo4.json"
+    }
+  }
+}

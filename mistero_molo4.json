@@ -1,0 +1,449 @@
+{
+    "Titolo": "Il Mistero del Molo 4",
+    "Protagonista": "Sherlock Holmes",
+    "Introduzione": "Londra, 1888. La pioggia batte incessante sui vetri di Baker Street. L'ispettore Lestrade ha mandato un messaggio urgente: un omicidio brutale al porto. Il gioco e' aperto.",
+    "InitialSceneId": "baker-street",
+    "SemanticThreshold": 0.58,
+    "EnableSemanticScoreLogging": false,
+    "GlobalRules": [
+        {
+            "Id": "check-inventory",
+            "IntentDescription": "Il giocatore vuole controllare gli oggetti e gli indizi raccolti fino a questo momento.",
+            "TriggerVerbs": [
+                "cosa ho in tasca",
+                "mostra il mio inventario",
+                "quali oggetti possiedo",
+                "guarda nelle mie tasche"
+            ],
+            "SuccessResponse": "Controlli l'interno del tuo cappotto per verificare gli indizi e gli oggetti raccolti finora."
+        },
+        {
+            "Id": "ask-hint",
+            "IntentDescription": "Il giocatore chiede un suggerimento o un riepilogo della situazione se si sente bloccato.",
+            "TriggerVerbs": [
+                "pensa ad alta voce",
+                "rifletti sulla situazione",
+                "chiedi consiglio a watson",
+                "elabora i dati raccolti"
+            ],
+            "SuccessResponse": "Il tuo intelletto superiore calcola le variabili: devi esplorare ogni angolo, parlare con i testimoni e trovare prove materiali prima di affrontare il colpevole."
+        }
+    ],
+    "Scenes": [
+        {
+            "Id": "baker-street",
+            "Titolo": "221B Baker Street",
+            "Descrizione": "Il tuo salotto e' avvolto nel fumo del tabacco. Il dottor Watson sta pulendo il suo revolver sulla poltrona. La carrozza per il porto ti aspetta in strada.",
+            "Rules": [
+                {
+                    "Id": "go-docks",
+                    "IntentDescription": "Il giocatore decide di iniziare l'avventura spostandosi al luogo del delitto.",
+                    "TriggerVerbs": [
+                        "vai al molo",
+                        "prendi la carrozza per il porto",
+                        "esci di casa e vai alla scena",
+                        "dirigiti al luogo del delitto"
+                    ],
+                    "SuccessResponse": "Indossi il tuo mantello e il cappello. Tu e Watson salite sulla carrozza che vi porta rapidamente ai moli nebbiosi.",
+                    "NextSceneId": "docks-entrance"
+                },
+                {
+                    "Id": "talk-watson",
+                    "IntentDescription": "Il giocatore interagisce con il suo compagno per atmosfera o consigli iniziali.",
+                    "TriggerVerbs": [
+                        "parla con watson",
+                        "chiedi a watson se e' pronto",
+                        "discuti il caso con il dottore",
+                        "osserva watson"
+                    ],
+                    "SuccessResponse": "Watson chiude il tamburo del revolver con un clic. 'Sono pronto a tutto, Holmes. Andiamo a prendere questo farabutto.'"
+                }
+            ]
+        },
+        {
+            "Id": "docks-entrance",
+            "Titolo": "Ingresso del Magazzino",
+            "Descrizione": "Una fitta nebbia avvolge il Molo 4. Gli agenti di Scotland Yard tengono a bada i curiosi. L'ispettore Lestrade presidia l'ingresso del magazzino dove si trova il corpo.",
+            "Rules": [
+                {
+                    "Id": "talk-lestrade",
+                    "IntentDescription": "Il giocatore parla con la polizia per ottenere il permesso formale di indagare.",
+                    "TriggerVerbs": [
+                        "parla con lestrade",
+                        "saluta l'ispettore",
+                        "chiedi il permesso di entrare",
+                        "interroga lestrade sui fatti"
+                    ],
+                    "SuccessResponse": "Lestrade sospira sollevato. 'Holmes, grazie al cielo! E' un disastro. Entra e dimmi cosa ne pensi.'",
+                    "GrantedFlags": [
+                        "permesso-lestrade"
+                    ]
+                },
+                {
+                    "Id": "enter-warehouse",
+                    "IntentDescription": "Il giocatore tenta di accedere alla scena del crimine superando le guardie.",
+                    "TriggerVerbs": [
+                        "entra nel magazzino",
+                        "supera il cordone di polizia",
+                        "vai a vedere la scena del crimine",
+                        "entra per esaminare il corpo"
+                    ],
+                    "RequiredFlags": [
+                        "permesso-lestrade"
+                    ],
+                    "BlockedResponse": "Un agente ti sbarra la strada. 'Mi spiace, signor Holmes. Devo avere l'ok dall'ispettore Lestrade prima di farla passare.'",
+                    "SuccessResponse": "Oltrepassi la linea di polizia e ti addentri nell'oscurita' del magazzino.",
+                    "NextSceneId": "crime-scene"
+                }
+            ]
+        },
+        {
+            "Id": "crime-scene",
+            "Titolo": "Interno del Magazzino",
+            "Descrizione": "Casse di legno sono accatastate ovunque. Al centro della stanza giace il cadavere di un uomo. Sulla destra c'e' un piccolo ufficio chiuso. Una porta sul retro conduce a un vicolo, mentre fuori si scorge un pub illuminato.",
+            "Rules": [
+                {
+                    "Id": "examine-body",
+                    "IntentDescription": "Il giocatore si avvicina al cadavere per iniziare la perlustrazione forense.",
+                    "TriggerVerbs": [
+                        "esamina il cadavere",
+                        "avvicinati al corpo",
+                        "ispeziona la vittima",
+                        "guarda il morto da vicino"
+                    ],
+                    "SuccessResponse": "Ti inginocchi accanto al poveretto per condurre un'analisi approfondita.",
+                    "NextSceneId": "victim-body"
+                },
+                {
+                    "Id": "look-office",
+                    "IntentDescription": "Il giocatore nota l'ufficio chiuso e si avvicina per indagare su come entrarvi.",
+                    "TriggerVerbs": [
+                        "guarda l'ufficio",
+                        "esamina la porta dell'ufficio",
+                        "vai verso la stanza chiusa",
+                        "controlla l'ufficio sulla destra"
+                    ],
+                    "SuccessResponse": "Ti avvicini alla porta dell'ufficio per capire se c'e' modo di entrare.",
+                    "NextSceneId": "warehouse-office"
+                },
+                {
+                    "Id": "go-pub",
+                    "IntentDescription": "Il giocatore decide di esplorare il locale vicino per cercare possibili testimoni.",
+                    "TriggerVerbs": [
+                        "vai alla taverna",
+                        "entra nel pub",
+                        "esci verso il locale illuminato",
+                        "visita il pub dei marinai"
+                    ],
+                    "SuccessResponse": "Lasci temporaneamente il magazzino e spingi la porta del pub 'Il Mendicante Cieco'.",
+                    "NextSceneId": "pub-the-blind-beggar"
+                },
+                {
+                    "Id": "go-alley",
+                    "IntentDescription": "Il giocatore esce sul retro per cercare la via di fuga dell'assassino.",
+                    "TriggerVerbs": [
+                        "esplora il vicolo",
+                        "vai sul retro",
+                        "esci dalla porta posteriore",
+                        "esamina i dintorni del magazzino"
+                    ],
+                    "SuccessResponse": "Esci dalla porta posteriore e ti ritrovi nel fango di un vicolo buio.",
+                    "NextSceneId": "alleyway"
+                }
+            ]
+        },
+        {
+            "Id": "victim-body",
+            "Titolo": "Il Cadavere",
+            "Descrizione": "La vittima e' un caposquadra del porto. Ha un trauma cranico evidente. I suoi vestiti sono lisi ma puliti. Sembra che l'assassino lo abbia aggredito di sorpresa.",
+            "Rules": [
+                {
+                    "Id": "search-pockets",
+                    "IntentDescription": "Il giocatore ispeziona fisicamente la vittima per trovare indizi o oggetti chiave.",
+                    "TriggerVerbs": [
+                        "perquisisci il corpo",
+                        "cerca nelle tasche della giacca",
+                        "esamina a fondo i vestiti",
+                        "ispeziona gli abiti"
+                    ],
+                    "SuccessResponse": "Tasti il cappotto logoro e senti un oggetto metallico. Estrai un orologio d'argento rotto e macchiato di sangue.",
+                    "GrantedItems": [
+                        "orologio-rotto"
+                    ]
+                },
+                {
+                    "Id": "leave-body",
+                    "IntentDescription": "Il giocatore ha finito con il cadavere e torna alla visuale generale della stanza.",
+                    "TriggerVerbs": [
+                        "alzati in piedi",
+                        "allontanati dal corpo",
+                        "torna a guardare la stanza",
+                        "smetti di esaminare il morto"
+                    ],
+                    "SuccessResponse": "Ti rialzi, spolverandoti i pantaloni, e torni al centro del magazzino.",
+                    "NextSceneId": "crime-scene"
+                }
+            ]
+        },
+        {
+            "Id": "warehouse-office",
+            "Titolo": "Porta dell'Ufficio",
+            "Descrizione": "Una robusta porta di quercia sbarra l'accesso all'ufficio del caposquadra. La serratura e' in ottone massiccio e sembra intatta.",
+            "Rules": [
+                {
+                    "Id": "use-key",
+                    "IntentDescription": "Il giocatore prova a usare l'oggetto chiave ottenuto in precedenza per sbloccare l'accesso.",
+                    "TriggerVerbs": [
+                        "usa la chiave",
+                        "apri la porta con la chiave",
+                        "inserisci la chiave nella serratura",
+                        "sblocca la porta d'ingresso"
+                    ],
+                    "RequiredItems": [
+                        "chiave-ufficio"
+                    ],
+                    "ConsumedItems": [
+                        "chiave-ufficio"
+                    ],
+                    "SuccessResponse": "La chiave gira perfettamente con un netto 'clack'. La porta si apre scricchiolando.",
+                    "NextSceneId": "office-interior"
+                },
+                {
+                    "Id": "examine-door",
+                    "IntentDescription": "Il giocatore controlla la porta e la serratura per capire il metodo migliore per procedere.",
+                    "TriggerVerbs": [
+                        "esamina la porta",
+                        "guarda la serratura",
+                        "prova ad aprire la maniglia",
+                        "controlla la robustezza della porta"
+                    ],
+                    "SuccessResponse": "E' chiusa a chiave. Non ci sono segni di scasso. Ti serve la chiave giusta per entrare."
+                },
+                {
+                    "Id": "leave-office-door",
+                    "IntentDescription": "Il giocatore decide di allontanarsi momentaneamente dall'ufficio per cercare altro.",
+                    "TriggerVerbs": [
+                        "torna indietro",
+                        "allontanati dalla porta",
+                        "vai verso il centro del magazzino",
+                        "abbandona l'ufficio"
+                    ],
+                    "SuccessResponse": "Lasci perdere la porta per ora.",
+                    "NextSceneId": "crime-scene"
+                }
+            ]
+        },
+        {
+            "Id": "office-interior",
+            "Titolo": "Interno dell'Ufficio",
+            "Descrizione": "L'ufficio puzza di fumo stantio e inchiostro. C'e' una piccola scrivania di legno coperta di scartoffie e una lanterna spenta.",
+            "Rules": [
+                {
+                    "Id": "search-desk",
+                    "IntentDescription": "Il giocatore perquisisce i mobili della stanza per trovare appunti o documenti rilevanti.",
+                    "TriggerVerbs": [
+                        "cerca sulla scrivania",
+                        "leggi i documenti sparsi",
+                        "esamina i fogli",
+                        "ispeziona la scrivania"
+                    ],
+                    "SuccessResponse": "Sotto un registro contabile, trovi una lettera minatoria firmata 'Il Corvo', con un indirizzo scarabocchiato sul retro: Vicolo del Macellaio, 12.",
+                    "GrantedItems": [
+                        "indirizzo-nascondiglio"
+                    ]
+                },
+                {
+                    "Id": "leave-interior",
+                    "IntentDescription": "Il giocatore termina l'ispezione della stanza e ritorna all'area precedente.",
+                    "TriggerVerbs": [
+                        "esci dall'ufficio",
+                        "torna nel magazzino",
+                        "chiudi l'ufficio ed esci",
+                        "abbandona la stanza"
+                    ],
+                    "SuccessResponse": "Esci dall'ufficio e ti ritrovi di nuovo nell'ampia sala del magazzino.",
+                    "NextSceneId": "crime-scene"
+                }
+            ]
+        },
+        {
+            "Id": "pub-the-blind-beggar",
+            "Titolo": "Pub 'Il Mendicante Cieco'",
+            "Descrizione": "Il locale e' affollato di marinai e portuali brutali che bevono birra annacquata in silenzio. Il barista ti fissa con aria sospettosa mentre lucida un bicchiere.",
+            "Rules": [
+                {
+                    "Id": "show-watch",
+                    "IntentDescription": "Il giocatore usa l'indizio macabro per sciogliere la lingua ai PNG omertosi.",
+                    "TriggerVerbs": [
+                        "mostra l'orologio al barista",
+                        "fai vedere l'orologio rotto",
+                        "chiedi a proposito dell'orologio",
+                        "interroga il barista sull'oggetto"
+                    ],
+                    "RequiredItems": [
+                        "orologio-rotto"
+                    ],
+                    "GrantedItems": [
+                        "chiave-ufficio"
+                    ],
+                    "SuccessResponse": "Il barista sbianca e sussulta. 'Quel sangue... Quello era di Thomas! Prendi la chiave del suo ufficio, signore. Voglio che troviate chi gli ha fatto questo!'"
+                },
+                {
+                    "Id": "observe-pub",
+                    "IntentDescription": "Il giocatore tenta di socializzare o raccogliere voci generiche come fallback.",
+                    "TriggerVerbs": [
+                        "parla con i clienti",
+                        "ascolta le conversazioni ai tavoli",
+                        "osserva l'ambiente circostante",
+                        "guarda la clientela"
+                    ],
+                    "SuccessResponse": "Appena provi ad avvicinarti, i marinai distolgono lo sguardo e smettono di parlare. Qui nessuno si fida degli estranei."
+                },
+                {
+                    "Id": "leave-pub",
+                    "IntentDescription": "Il giocatore decide di uscire dal locale ostile.",
+                    "TriggerVerbs": [
+                        "esci dal pub",
+                        "torna fuori nella nebbia",
+                        "lascia il locale",
+                        "vai via dalla taverna"
+                    ],
+                    "SuccessResponse": "L'aria viziata del pub iniziava a darti fastidio. Esci di nuovo nel freddo del porto.",
+                    "NextSceneId": "crime-scene"
+                }
+            ]
+        },
+        {
+            "Id": "alleyway",
+            "Titolo": "Il Vicolo Oscuro",
+            "Descrizione": "Il vicolo puzza di pesce marcio e acqua stagnante. Non c'e' illuminazione, solo la fioca luce della luna che penetra la nebbia fitta.",
+            "Rules": [
+                {
+                    "Id": "examine-mud",
+                    "IntentDescription": "Il giocatore cerca tracce fisiche nell'ambiente per determinare la direzione di fuga.",
+                    "TriggerVerbs": [
+                        "esamina il fango",
+                        "cerca impronte per terra",
+                        "guarda attentamente il suolo",
+                        "cerca tracce di fuga"
+                    ],
+                    "SuccessResponse": "Usando la tua lente di ingrandimento, noti pesanti impronte di stivali sporchi di argilla rossa. L'assassino e' fuggito di qua.",
+                    "GrantedFlags": [
+                        "visto-impronte"
+                    ]
+                },
+                {
+                    "Id": "go-hideout",
+                    "IntentDescription": "Il giocatore usa l'indirizzo trovato nell'ufficio per avanzare verso il finale.",
+                    "TriggerVerbs": [
+                        "vai al nascondiglio",
+                        "segui l'indirizzo trovato",
+                        "dirigiti al covo del corvo",
+                        "vai al vicolo del macellaio"
+                    ],
+                    "RequiredItems": [
+                        "indirizzo-nascondiglio"
+                    ],
+                    "BlockedResponse": "Potresti seguire le orme per un po', ma nel labirinto di Londra perderesti il sospettato senza un indirizzo preciso a cui puntare.",
+                    "SuccessResponse": "Conoscendo la destinazione esatta grazie agli appunti trovati, tu e Watson procedete svelti verso il Vicolo del Macellaio.",
+                    "NextSceneId": "suspect-hideout"
+                },
+                {
+                    "Id": "leave-alley",
+                    "IntentDescription": "Il giocatore torna indietro, convinto di non poter procedere oltre in questo momento.",
+                    "TriggerVerbs": [
+                        "torna al magazzino",
+                        "rientra dall'ingresso sul retro",
+                        "lascia il vicolo fangoso",
+                        "abbandona il vicoletto"
+                    ],
+                    "SuccessResponse": "Decidi che per il momento il vicolo non ha altro da offrire e rientri.",
+                    "NextSceneId": "crime-scene"
+                }
+            ]
+        },
+        {
+            "Id": "suspect-hideout",
+            "Titolo": "Il Covo del Corvo",
+            "Descrizione": "Siete davanti al numero 12 del Vicolo del Macellaio. E' una casa fatiscente. Senti dei rumori sommessi provenienti dall'interno. Puoi provare a sfondare la porta per coglierlo di sorpresa con la forza, oppure scivolare silenziosamente dentro da una finestra mezza aperta.",
+            "Rules": [
+                {
+                    "Id": "kick-door",
+                    "IntentDescription": "Il giocatore sceglie l'approccio diretto e rumoroso, sbloccando le conseguenze bellicose.",
+                    "TriggerVerbs": [
+                        "sfonda la porta",
+                        "entra sfondando con un calcio",
+                        "irrompi violentemente dalla porta principale",
+                        "fai irruzione con forza"
+                    ],
+                    "SuccessResponse": "Tu e Watson vi lanciate contro il legno marcio. La porta cede di schianto e vi precipitate all'interno, armi in pugno!",
+                    "GrantedFlags": [
+                        "approccio-aggressivo"
+                    ],
+                    "NextSceneId": "confrontation"
+                },
+                {
+                    "Id": "sneak-window",
+                    "IntentDescription": "Il giocatore sceglie l'approccio furtivo e tattico, sbloccando un finale piu' pulito.",
+                    "TriggerVerbs": [
+                        "entra dalla finestra",
+                        "infiltrati silenziosamente",
+                        "scivola dentro di nascosto",
+                        "passa dalla finestra aperta"
+                    ],
+                    "SuccessResponse": "Fai cenno a Watson di restare fuori. Con agilita' felina, ti infili dalla finestra senza fare il minimo rumore, ritrovandoti alle spalle dell'assassino.",
+                    "GrantedFlags": [
+                        "approccio-stealth"
+                    ],
+                    "NextSceneId": "confrontation"
+                }
+            ]
+        },
+        {
+            "Id": "confrontation",
+            "Titolo": "Resa dei Conti",
+            "Descrizione": "La stanza e' buia. 'Il Corvo', un energumeno con le mani sporche di sangue, capisce di essere in trappola. Devi chiudere il caso ora.",
+            "Rules": [
+                {
+                    "Id": "stealth-arrest",
+                    "IntentDescription": "Il giocatore sfrutta il vantaggio tattico della furtivita' per neutralizzare l'assassino facilmente.",
+                    "TriggerVerbs": [
+                        "arrestalo da dietro",
+                        "ammanettalo di sorpresa",
+                        "bloccalo in silenzio",
+                        "puntagli la pistola alla nuca"
+                    ],
+                    "RequiredFlags": [
+                        "approccio-stealth"
+                    ],
+                    "SuccessResponse": "Essendo arrivato non visto, gli punti il revolver alla schiena. 'Fine dei giochi', sussurri. Il Corvo alza le mani tremando. L'arresto e' pulito ed efficiente. Un altro brillante caso risolto, signor Holmes!"
+                },
+                {
+                    "Id": "aggro-fight",
+                    "IntentDescription": "Il giocatore affronta il criminale in uno scontro diretto a seguito della rumorosa irruzione.",
+                    "TriggerVerbs": [
+                        "combatti contro di lui",
+                        "schiva e colpiscilo",
+                        "spara per disarmarlo",
+                        "affronta il corvo fisicamente"
+                    ],
+                    "RequiredFlags": [
+                        "approccio-aggressivo"
+                    ],
+                    "SuccessResponse": "Il Corvo tenta disperatamente di sgozzarti, ma grazie alle tue abilita' marziali neutralizzi il fendente e lo scaraventi a terra. Watson lo ammanetta. Caso chiuso!"
+                },
+                {
+                    "Id": "talk-suspect",
+                    "IntentDescription": "Il giocatore prova a far confessare l'assassino per carpire informazioni sul mandante.",
+                    "TriggerVerbs": [
+                        "parlagli",
+                        "chiedi il motivo dell'omicidio",
+                        "interroga l'assassino",
+                        "esigi delle risposte"
+                    ],
+                    "SuccessResponse": "Il criminale ringhia. 'Thomas sapeva dei traffici di Moriarty. Doveva essere messo a tacere'. Il nome della tua nemesi risuona nella stanza fredda."
+                }
+            ]
+        }
+    ]
+}
