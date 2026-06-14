@@ -50,8 +50,17 @@ namespace InteractiveStories
 
 				if (input.Trim().Equals("esci", StringComparison.OrdinalIgnoreCase))
 				{
-					Console.WriteLine("Sessione terminata.");
-					break;
+					Console.Write("Sei sicuro di voler finire la storia? (s/n): ");
+					string? confirm = Console.ReadLine();
+					if (confirm?.Trim().Equals("s", StringComparison.OrdinalIgnoreCase) == true)
+					{
+						Console.WriteLine("Sessione terminata.");
+						break;
+					}
+					else
+					{
+						continue;
+					}
 				}
 
 				try

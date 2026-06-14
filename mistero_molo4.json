@@ -205,6 +205,9 @@
                     "ConsumedItems": [
                         "chiave-ufficio"
                     ],
+                    "GrantedFlags": [
+                        "chiave-ufficio"
+                    ],
                     "SuccessResponse": "La chiave gira perfettamente con un netto 'clack'. La porta si apre scricchiolando.",
                     "NextSceneId": "office-interior"
                 },

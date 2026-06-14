@@ -260,7 +260,7 @@ namespace SimpleLLM.Library.TextAdventure
 		{
 			bool hasFlags = rule.RequiredFlags.All(flag => _state.Flags.Contains(flag));
 			bool hasItems = rule.RequiredItems.All(item => _state.Inventory.Contains(item));
-			return hasFlags && hasItems;
+			return hasFlags || hasItems;
 		}
 
 		private void ApplyRule(StoryActionRule rule)
