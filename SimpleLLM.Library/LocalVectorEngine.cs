@@ -19,6 +19,7 @@ namespace SimpleLLM.Library.VectorEngine
 		/// Calcola la similarita' tra due vettori (tipicamente coseno).
 		/// </summary>
 		float CalculateSimilarity(ReadOnlySpan<float> vectorA, ReadOnlySpan<float> vectorB);
+		float GetSimilarity(string input1, string input2);
 	}
 
 	/// <summary>
@@ -65,6 +66,35 @@ namespace SimpleLLM.Library.VectorEngine
 			return TensorPrimitives.CosineSimilarity(vectorA, vectorB);
 		}
 
+		public float GetSimilarity(string input1, string input2)
+		{
+			// Se le stringhe sono identiche dopo la normalizzazione, il punteggio è massimo
+			if (input1 == input2) return 1.0f;
+
+			// Recupera i vettori di embedding per entrambi gli input
+			var vector1 = GetEmbedding(input1);
+			var vector2 = GetEmbedding(input2);
+
+			// Calcola la similarità del coseno tra i due vettori
+			float dotProduct = 0f;
+			float magnitude1 = 0f;
+			float magnitude2 = 0f;
+
+			for (int i = 0; i < vector1.Length; i++)
+			{
+				dotProduct += vector1.Span[i] * vector2.Span[i];
+				magnitude1 += vector1.Span[i] * vector1.Span[i];
+				magnitude2 += vector2.Span[i] * vector2.Span[i];
+			}
+
+			float magnitude = (float)Math.Sqrt(magnitude1) * (float)Math.Sqrt(magnitude2);
+
+			if (magnitude == 0) return 0f;
+
+			return dotProduct / magnitude;
+		}
+
+
 		/// <summary>
 		/// Rilascia le risorse native del runtime embedding.
 		/// </summary>
@@ -72,5 +102,7 @@ namespace SimpleLLM.Library.VectorEngine
 		{
 			_embedder.Dispose();
 		}
+
+		
 	}
 }
